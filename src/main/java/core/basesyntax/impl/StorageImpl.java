@@ -3,9 +3,9 @@ package core.basesyntax.impl;
 import core.basesyntax.Storage;
 
 public class StorageImpl<K, V> implements Storage<K, V> {
+    private static final int DEFAULT_CAPACITY = 10;
     private K[] keys;
     private V[] values;
-    private final static int DEFAULT_CAPACITY = 10;
     private int currentkey = 0;
     private int size = 0;
 
@@ -13,7 +13,6 @@ public class StorageImpl<K, V> implements Storage<K, V> {
         keys = (K[]) new Object[DEFAULT_CAPACITY];
         values = (V[]) new Object[DEFAULT_CAPACITY];
     }
-
 
     @Override
     public void put(K key, V value) {
