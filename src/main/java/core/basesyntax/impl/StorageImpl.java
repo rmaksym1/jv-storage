@@ -3,36 +3,39 @@ package core.basesyntax.impl;
 import core.basesyntax.Storage;
 
 public class StorageImpl<K, V> implements Storage<K, V> {
-    private Object[] idstorage = new Object[10];
-    private Object[] storage = new Object[10];
-    private K key;
-    private V value;
+    private K[] keys;
+    private V[] values;
+    private final static int DEFAULT_CAPACITY = 10;
     private int currentkey = 0;
+    private int size = 0;
+
+    public StorageImpl() {
+        keys = (K[]) new Object[DEFAULT_CAPACITY];
+        values = (V[]) new Object[DEFAULT_CAPACITY];
+    }
+
 
     @Override
     public void put(K key, V value) {
         for (int i = 0; i < currentkey; i++) {
-            if (idstorage[i] == null && key == null) {
-                storage[i] = value;
-                return;
-            }
-            if (idstorage[i] != null && idstorage[i].equals(key)) {
-                storage[i] = value;
+            if ((keys[i] == null && key == null) || (keys[i] != null && keys[i].equals(key))) {
+                values[i] = value;
                 return;
             }
         }
-        storage[currentkey] = value;
-        idstorage[currentkey] = key;
+        keys[currentkey] = key;
+        values[currentkey] = value;
         currentkey++;
+        size++;
     }
 
     @Override
     public V get(K key) {
-        for (int i = 0; i < idstorage.length; i++) {
-            if (idstorage[i] == null && key == null) {
-                return (V) storage[i];
-            } else if (idstorage[i] != null && idstorage[i].equals(key)) {
-                return (V) storage[i];
+        for (int i = 0; i < keys.length; i++) {
+            if (keys[i] == null && key == null) {
+                return values[i];
+            } else if (keys[i] != null && keys[i].equals(key)) {
+                return values[i];
             }
         }
         return null;
@@ -40,23 +43,6 @@ public class StorageImpl<K, V> implements Storage<K, V> {
 
     @Override
     public int size() {
-        int length = 0;
-        for (int i = 0; i < currentkey; i++) {
-            boolean alreadyCounted = false;
-            for (int j = 0; j < i; j++) {
-                if (idstorage[i] == null && idstorage[j] == null) {
-                    alreadyCounted = true;
-                    break;
-                } else if (idstorage[i] != null && idstorage[i].equals(idstorage[j])) {
-                    alreadyCounted = true;
-                    break;
-                }
-            }
-            if (!alreadyCounted) {
-                length++;
-            }
-        }
-        return length;
+        return size;
     }
-
 }
