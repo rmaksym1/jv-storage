@@ -2,14 +2,12 @@ package core.basesyntax.impl;
 
 import core.basesyntax.Storage;
 
-import java.util.Objects;
-
 public class StorageImpl<K, V> implements Storage<K, V> {
-    Object[] idstorage = new Object[10];
-    Object[] storage = new Object[10];
+    private Object[] idstorage = new Object[10];
+    private Object[] storage = new Object[10];
     private K key;
     private V value;
-    int currentkey = 0;
+    private int currentkey = 0;
 
     @Override
     public void put(K key, V value) {
@@ -27,7 +25,6 @@ public class StorageImpl<K, V> implements Storage<K, V> {
         idstorage[currentkey] = key;
         currentkey++;
     }
-
 
     @Override
     public V get(K key) {
