@@ -6,8 +6,8 @@ public class StorageImpl<K, V> implements Storage<K, V> {
     private static final int DEFAULT_CAPACITY = 10;
     private K[] keys;
     private V[] values;
-    private int currentkey = 0;
-    private int size = 0;
+    int currentkey;
+    int size;
 
     public StorageImpl() {
         keys = (K[]) new Object[DEFAULT_CAPACITY];
@@ -22,14 +22,15 @@ public class StorageImpl<K, V> implements Storage<K, V> {
                 return;
             }
         }
-        keys[currentkey] = key;
-        values[currentkey] = value;
-        currentkey++;
-        size++;
+        if (size < DEFAULT_CAPACITY) {
+            keys[currentkey] = key;
+            values[currentkey] = value;
+            currentkey++;
+            size++;
+        }
     }
 
-    @Override
-    public V get(K key) {
+    private V findIndexByKey(K key) {
         for (int i = 0; i < keys.length; i++) {
             if (keys[i] == null && key == null) {
                 return values[i];
@@ -38,6 +39,11 @@ public class StorageImpl<K, V> implements Storage<K, V> {
             }
         }
         return null;
+    }
+
+    @Override
+    public V get(K key) {
+        return findIndexByKey(key);
     }
 
     @Override
